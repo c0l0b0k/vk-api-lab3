@@ -12,13 +12,7 @@ def get_user_data(user_id, token):
         print("Ошибка при получении данных пользователя:", user_data['error'])
         sys.exit()
 
-    user_info = user_data['response'][0]
-    # Оставляем id и объединяем first_name и last_name в name
-    user_info_modified = {
-        'id': user_info['id'],
-        'name': f"{user_info['first_name']} {user_info['last_name']}"
-    }
-    return user_info_modified  # Возвращаем информацию о пользователе
+    return user_data['response'][0]  # Возвращаем информацию о пользователе
 
 # Функция для получения подписчиков и подписок
 def get_followers_and_subscriptions(user_id, token):
@@ -107,6 +101,17 @@ def main():
 
     # Получение подписчиков и подписок
     followers, users, groups = get_followers_and_subscriptions(user_id, token)
+
+    # Вывод данных в консоль
+    print(f"Данные пользователя {user_info['first_name']} {user_info['last_name']}:")
+    print(f"Количество подписчиков: {len(followers)}")
+    print(f"Количество пользователей в подписках: {len(users)}")
+    print(f"Количество групп в подписках: {len(groups)}")
+
+    # Сохранение данных в JSON-файл
+    save_to_json(user_info, followers, users, groups)
+    print("Данные сохранены в файл 'user_data.json'.")
+
 # Запуск программы
 if __name__ == '__main__':
     main()
